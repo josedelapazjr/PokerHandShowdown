@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace PokerHandShowdown
@@ -7,45 +8,73 @@ namespace PokerHandShowdown
     {
         static void Main(string[] args)
         {
-            // Console.WriteLine("Hello World!");
-            var foobar = new List<CardsOnHand>();
-            var playerCards1 = new CardsOnHand("Joe", new List<Card> { 
-                    new Card(CardRank.Eight, CardSuit.Spade),
-                    new Card(CardRank.Eight, CardSuit.Diamond),
-                    new Card(CardRank.Ace, CardSuit.Diamond),
-                    new Card(CardRank.Queen, CardSuit.Diamond),
-                    new Card(CardRank.Jack, CardSuit.Heart),
+            List<Card> listofCards1 = new List<Card> { 
+                new Card(CardRank.Eight, CardSuit.Spade),
+                new Card(CardRank.Eight, CardSuit.Diamond),
+                new Card(CardRank.Ace, CardSuit.Diamond),
+                new Card(CardRank.Queen, CardSuit.Diamond),
+                new Card(CardRank.Jack, CardSuit.Heart)
+            };
+            
+            List<Card> listofCards2 = new List<Card> { 
+                new Card(CardRank.Ace, CardSuit.Spade),
+                new Card(CardRank.Queen, CardSuit.Spade),
+                new Card(CardRank.Eight, CardSuit.Spade),
+                new Card(CardRank.Six, CardSuit.Spade),
+                new Card(CardRank.Four, CardSuit.Spade)
+            };
+            
+            List<Card> listofCards3 = new List<Card> { 
+                new Card(CardRank.Four, CardSuit.Spade),
+                new Card(CardRank.Four, CardSuit.Heart),
+                new Card(CardRank.Three, CardSuit.Heart),
+                new Card(CardRank.Queen, CardSuit.Club),
+                new Card(CardRank.Eight, CardSuit.Club)
+            };
+            
+            
+            /*List<Card> listofCards1 = new List<Card> { 
+                new Card(CardRank.Three, CardSuit.Heart),
+                new Card(CardRank.Five, CardSuit.Diamond),
+                new Card(CardRank.Nine, CardSuit.Club),
+                new Card(CardRank.Nine, CardSuit.Diamond),
+                new Card(CardRank.Queen, CardSuit.Heart)
+            };
+            
+            List<Card> listofCards2 = new List<Card> { 
+                new Card(CardRank.Five, CardSuit.Club),
+                new Card(CardRank.Seven, CardSuit.Diamond),
+                new Card(CardRank.Nine, CardSuit.Heart),
+                new Card(CardRank.Nine, CardSuit.Spade),
+                new Card(CardRank.Queen, CardSuit.Spade)
+            };
+            
+            List<Card> listofCards3 = new List<Card> { 
+                new Card(CardRank.Two, CardSuit.Heart),
+                new Card(CardRank.Two, CardSuit.Club),
+                new Card(CardRank.Five, CardSuit.Spade),
+                new Card(CardRank.Ten, CardSuit.Club),
+                new Card(CardRank.Ace, CardSuit.Heart)
+            };
+              
+            */
+
+            PokerHandShowdown pokerHandShowdown = new PokerHandShowdown(
+                new List<PokerPlayer> {
+                    new PokerPlayer("Joe", listofCards1),  
+                    new PokerPlayer("Bob", listofCards2),
+                    new PokerPlayer("Sally", listofCards3),  
                 }
             );
-            var playerCards2 = new CardsOnHand("Bob", new List<Card> { 
-                    new Card(CardRank.Ace, CardSuit.Spade),
-                    new Card(CardRank.Queen, CardSuit.Spade),
-                    new Card(CardRank.Eight, CardSuit.Spade),
-                    new Card(CardRank.Six, CardSuit.Spade),
-                    new Card(CardRank.Four, CardSuit.Spade),
-                }
-            );
-            var playerCards3 = new CardsOnHand("Sally", new List<Card> { 
-                    new Card(CardRank.Four, CardSuit.Spade),
-                    new Card(CardRank.Four, CardSuit.Heart),
-                    new Card(CardRank.Three, CardSuit.Heart),
-                    new Card(CardRank.Queen, CardSuit.Club),
-                    new Card(CardRank.Eight, CardSuit.Club),
-                }
-            );
-            new CardsOnHandEvaluator(new List<CardsOnHand> { 
-                playerCards1, 
-                playerCards2,
-                playerCards3 
-            });
+            Console.WriteLine("{0} wins", pokerHandShowdown.GetWinner());
         }
     }
 
     public enum PokerHand {
-        Flush,
-        ThreeOfAKind,
+        HighCard,
         OnePair,
-        HighCard
+        ThreeOfAKind,
+        Flush
     }
 
     public enum CardSuit {
@@ -80,38 +109,111 @@ namespace PokerHandShowdown
             Suit = suit;
         }
         public int CompareTo(Card other) {
-            // Alphabetic sort if salary is equal. [A to Z]
             if (this.Rank == other.Rank) {
                 return this.Suit.CompareTo(other.Suit);
             }
-            // Default to salary sort. [High to low]
             return other.Rank.CompareTo(this.Rank);
         }
     }
 
-    public class CardsOnHand {
-        public List<Card> Cards {get; set;}
-        public string Name {get; set;}
-
-        public CardsOnHand(string name, List<Card> cards) {
-            Cards = cards;
-            Name = name;
+    public class CardGroup : IComparable<CardGroup> {
+        public PokerHand PokerHand { get; private set; }
+        public List<Card> CardList { get; private set; }
+        public CardRank Rank { get; private set; }
+        
+        public CardGroup(PokerHand pokerHand, List<Card> cardList) {
+            PokerHand = pokerHand;
+            CardList = cardList;
+            Rank = cardList[0].Rank;
+        }
+        
+        public int CompareTo(CardGroup other) {
+            return other.PokerHand.CompareTo(this.PokerHand);
         }
     }
 
-    public class CardsOnHandEvaluator {
-        public List<CardsOnHand> CardsOnHandList {get; set;}
-        public CardsOnHandEvaluator(List<CardsOnHand> cardsOnHandList) {
-            CardsOnHandList = cardsOnHandList;
-            Console.WriteLine("CardsOnHandEvaluator!"); 
-            foreach( CardsOnHand cardsOnHand in cardsOnHandList) {
-                Console.Write("{0} => ", cardsOnHand.Name);   
-                cardsOnHand.Cards.Sort();  
-                foreach( Card card in cardsOnHand.Cards) {
+    public class PokerPlayer : IComparable<PokerPlayer> {
+        public string Name { get; private set; }
+        public List<CardGroup> CardGroupList { get; private set; }
+        public PokerHand HighestPokerHand { get; private set; }
+        
+        public PokerPlayer(string name, List<Card> cardList) {
+            Name = name;
+            CardGroupList = HandEvaluate.generateGrouping(cardList);
+            HighestPokerHand = CardGroupList[0].PokerHand;
+        }
+        
+               
+        public int CompareTo(PokerPlayer other) {
+            var length = Math.Min(this.CardGroupList.Count, other.CardGroupList.Count);
+            var index = 0;
+            while(index < length) {
+                var cardGroup = this.CardGroupList[index];
+                var otherCardGroup = other.CardGroupList[index];
+                if(otherCardGroup.PokerHand != cardGroup.PokerHand) {
+                    return otherCardGroup.PokerHand.CompareTo(cardGroup.PokerHand);
+                }
+                if(otherCardGroup.Rank != cardGroup.Rank) {
+                    return otherCardGroup.Rank.CompareTo(cardGroup.Rank);
+                }
+                index++;
+            }
+            return 0;
+        }
+        
+        public void display() {
+            Console.WriteLine("{0} => {1}", Name, HighestPokerHand);
+            foreach(CardGroup cardGroup in CardGroupList) {
+                Console.Write(" {0} => {1} => ", cardGroup.PokerHand, cardGroup.Rank);
+                foreach(Card card in cardGroup.CardList) {
                     Console.Write("{0}{1} ", card.Rank, card.Suit);
                 }
-                Console.WriteLine("");   
+                Console.WriteLine(""); 
             }  
+        }    
+    }
+
+    public class HandEvaluate {
+        private const int NUMBER_OF_CARDS =  5;
+        public static List<CardGroup> generateGrouping(List<Card> cardList) {
+            cardList.Sort();
+            var cardGroupList = isFlush(cardList) 
+                ? new List<CardGroup> { new CardGroup(PokerHand.Flush, cardList )}
+                : cardList.GroupBy(card => card.Rank).Select( group => {
+                    if(hasThreeOfAKind(cardList)) return new CardGroup(PokerHand.ThreeOfAKind, group.ToList());
+                    if(hasPair(cardList)) return new CardGroup(PokerHand.OnePair, group.ToList());
+                    return new CardGroup(PokerHand.HighCard, group.ToList());    
+            }).ToList(); 
+            cardGroupList.Sort();
+            return cardGroupList;
+        } 
+
+        private static bool isFlush(List<Card> cardList) {
+            return cardList.GroupBy(card => card.Rank).Count() == NUMBER_OF_CARDS && cardList.GroupBy(card => card.Suit).Count() == 1;
+        }
+
+        private static bool hasThreeOfAKind(List<Card> cardList) {
+            return cardList.GroupBy(card => card.Rank).Count() == 3;
+        }
+
+        private static bool hasPair(List<Card> cardList) {
+            return cardList.GroupBy(card => card.Rank).Count() == 2;
+        }
+    }
+
+    public class PokerHandShowdown {
+        public List<PokerPlayer> PokerPlayerList { get; private set; }
+
+        public PokerHandShowdown(List<PokerPlayer> pokerPlayerList) {
+            PokerPlayerList = pokerPlayerList;    
+        }
+
+        public string GetWinner() {
+            PokerPlayerList.Sort();
+            foreach(PokerPlayer pokerPlayer in PokerPlayerList) {
+                pokerPlayer.display();    
+            }
+            return PokerPlayerList[0].Name;
         }
     }
 
@@ -123,5 +225,9 @@ namespace PokerHandShowdown
 // CardSuit ( Club, Spade, Heart, Diamond) => OK
 // PokerHand (Flush, Three Of A Kind, One Pair, High Card) => OK
 // Card ( CardRank, CardSuit) => OK
-// CardsOnHand ( Array of Cards, isFlush(), isThreeOfAKind, isHighCard)
-// CardsOnHandEvaluator
+// CardsOnHand ( Array of Cards, isFlush(), isThreeOfAKind, isHighCard) => OK
+// CardsOnHandEvaluator => ? (Tools/Utility class)
+// Test => ?
+// Validator => ?
+// HighCard => OK
+// Same Cards => OK
