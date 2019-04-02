@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace PokerHandShowdown
 {
-    public class HandEvaluateTool {
+    public class PokerHandEvaluateTool {
         private const int NUMBER_OF_CARDS =  5;
         private const int NUMBER_OF_CARDS_THREE_OF_A_KIND =  3;
         private const int NUMBER_OF_CARDS_PAIR =  2;
-        public static List<CardGroup> generateGrouping(List<Card> cardList) {
+        public static List<CardGroup> generateCardGrouping(List<Card> cardList) {
             if(isValidCardList(cardList)) {
                 cardList.Sort();
                 var cardGroupList = isFlush(cardList) 

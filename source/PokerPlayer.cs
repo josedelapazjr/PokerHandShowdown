@@ -11,7 +11,7 @@ namespace PokerHandShowdown
         
         public PokerPlayer(string name, List<Card> cardList) {
             Name = name;
-            CardGroupList = HandEvaluateTool.generateGrouping(cardList);
+            CardGroupList = PokerHandEvaluateTool.generateCardGrouping(cardList);
             TiedPlayerList = new List<PokerPlayer>();
         }
         
