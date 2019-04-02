@@ -135,12 +135,10 @@ namespace PokerHandShowdown
     public class PokerPlayer : IComparable<PokerPlayer> {
         public string Name { get; private set; }
         public List<CardGroup> CardGroupList { get; private set; }
-        public PokerHand HighestPokerHand { get; private set; }
         
         public PokerPlayer(string name, List<Card> cardList) {
             Name = name;
             CardGroupList = HandEvaluate.generateGrouping(cardList);
-            HighestPokerHand = CardGroupList[0].PokerHand;
         }
         
                
@@ -162,7 +160,7 @@ namespace PokerHandShowdown
         }
         
         public void display() {
-            Console.WriteLine("{0} => {1}", Name, HighestPokerHand);
+            Console.WriteLine("{0} => {1}", Name, CardGroupList[0].PokerHand);
             foreach(CardGroup cardGroup in CardGroupList) {
                 Console.Write(" {0} => {1} => ", cardGroup.PokerHand, cardGroup.Rank);
                 foreach(Card card in cardGroup.CardList) {
@@ -180,24 +178,25 @@ namespace PokerHandShowdown
             var cardGroupList = isFlush(cardList) 
                 ? new List<CardGroup> { new CardGroup(PokerHand.Flush, cardList )}
                 : cardList.GroupBy(card => card.Rank).Select( group => {
-                    if(hasThreeOfAKind(cardList)) return new CardGroup(PokerHand.ThreeOfAKind, group.ToList());
-                    if(hasPair(cardList)) return new CardGroup(PokerHand.OnePair, group.ToList());
-                    return new CardGroup(PokerHand.HighCard, group.ToList());    
+                    List<Card> cardListPerGroup = group.ToList();
+                    if(isThreeOfAKind(cardListPerGroup)) return new CardGroup(PokerHand.ThreeOfAKind, cardListPerGroup);
+                    if(isPair(cardListPerGroup)) return new CardGroup(PokerHand.OnePair, cardListPerGroup);
+                    return new CardGroup(PokerHand.HighCard, cardListPerGroup);    
             }).ToList(); 
             cardGroupList.Sort();
             return cardGroupList;
         } 
 
-        private static bool isFlush(List<Card> cardList) {
+        public static bool isFlush(List<Card> cardList) {
             return cardList.GroupBy(card => card.Rank).Count() == NUMBER_OF_CARDS && cardList.GroupBy(card => card.Suit).Count() == 1;
         }
 
-        private static bool hasThreeOfAKind(List<Card> cardList) {
-            return cardList.GroupBy(card => card.Rank).Count() == 3;
+        private static bool isThreeOfAKind(List<Card> cardList) {
+            return cardList.Count() == 3;
         }
 
-        private static bool hasPair(List<Card> cardList) {
-            return cardList.GroupBy(card => card.Rank).Count() == 2;
+        private static bool isPair(List<Card> cardList) {
+            return cardList.Count() == 2;
         }
     }
 
@@ -229,5 +228,6 @@ namespace PokerHandShowdown
 // CardsOnHandEvaluator => ? (Tools/Utility class)
 // Test => ?
 // Validator => ?
+// Tie => ?
 // HighCard => OK
 // Same Cards => OK
