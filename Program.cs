@@ -43,15 +43,3 @@ namespace PokerHandShowdown
         }
     }
 }
-
-// CardRank (Two ~ Ace) => OK
-// CardSuit ( Club, Spade, Heart, Diamond) => OK
-// PokerHand (Flush, Three Of A Kind, One Pair, High Card) => OK
-// Card ( CardRank, CardSuit) => OK
-// CardsOnHand ( Array of Cards, isFlush(), isThreeOfAKind, isHighCard) => OK
-// CardsOnHandEvaluator => ? (Tools/Utility class)
-// Test => OK
-// Validator => OK
-// Tie => ?
-// HighCard => OK
-// Same Cards => OK
