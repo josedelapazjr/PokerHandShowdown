@@ -9,7 +9,7 @@ namespace PokerHandShowdown
         
         public PokerPlayer(string name, List<Card> cardList) {
             Name = name;
-            CardGroupList = HandEvaluate.generateGrouping(cardList);
+            CardGroupList = HandEvaluateTool.generateGrouping(cardList);
         }
         
                

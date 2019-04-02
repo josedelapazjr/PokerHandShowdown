@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace PokerHandShowdown
 {
-    public class HandEvaluate {
+    public class HandEvaluateTool {
         private const int NUMBER_OF_CARDS =  5;
+        private const int NUMBER_OF_CARDS_THREE_OF_A_KIND =  3;
+        private const int NUMBER_OF_CARDS_PAIR =  2;
         public static List<CardGroup> generateGrouping(List<Card> cardList) {
             if(isValidCardList(cardList)) {
                 cardList.Sort();
@@ -13,8 +15,8 @@ namespace PokerHandShowdown
                     ? new List<CardGroup> { new CardGroup(PokerHand.Flush, cardList )}
                     : cardList.GroupBy(card => card.Rank).Select( group => {
                         List<Card> cardListPerGroup = group.ToList();
-                        if(isThreeOfAKind(cardListPerGroup)) return new CardGroup(PokerHand.ThreeOfAKind, cardListPerGroup);
-                        if(isPair(cardListPerGroup)) return new CardGroup(PokerHand.OnePair, cardListPerGroup);
+                        if(cardListPerGroup.Count() == NUMBER_OF_CARDS_THREE_OF_A_KIND) return new CardGroup(PokerHand.ThreeOfAKind, cardListPerGroup);
+                        if(cardListPerGroup.Count() == NUMBER_OF_CARDS_PAIR) return new CardGroup(PokerHand.OnePair, cardListPerGroup);
                         return new CardGroup(PokerHand.HighCard, cardListPerGroup);    
                 }).ToList(); 
                 cardGroupList.Sort();
@@ -28,14 +30,6 @@ namespace PokerHandShowdown
         }
         public static bool isValidCardList(List<Card> cardList) {
             return cardList.GroupBy(card => new { card.Rank, card.Suit}).Where(group => group.Count() > 1).Count() == 0;
-        }
-
-        private static bool isThreeOfAKind(List<Card> cardList) {
-            return cardList.Count() == 3;
-        }
-
-        private static bool isPair(List<Card> cardList) {
-            return cardList.Count() == 2;
         }
     }
 

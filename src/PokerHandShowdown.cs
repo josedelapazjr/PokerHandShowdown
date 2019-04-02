@@ -12,9 +12,6 @@ namespace PokerHandShowdown
 
         public string GetWinner() {
             PokerPlayerList.Sort();
-            foreach(PokerPlayer pokerPlayer in PokerPlayerList) {
-                pokerPlayer.display();    
-            }
             return PokerPlayerList[0].Name;
         }
     }   
