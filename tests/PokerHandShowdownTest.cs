@@ -6,9 +6,10 @@ namespace PokerHandShowdown
     [TestFixture]
     class PokerHandShowdownTest {
 
-        [TestCase( new object[] {"QD, 8D, KD, 7D, 3D", "AS, QS, 8S, 6S, 4S", "4S, 4H, 3H, QC, 8C"}, new object[] {"2nd Player"})]
-        [TestCase( new object[] {"3H, 5D, 9C, 9D, QH", "2H, 2C, 5S, 10C, AH", "5C, 7D, 9H, 9S, QS"}, new object[] {"3rd Player"})]
-        [TestCase( new object[] {"5C, 7D, 8H, 9S, QD", "2H, 3D, 4C, 5D, 10H", "2C, 4D, 5S, 10C, JH"}, new object[] {"1st Player"})]
+        [TestCase( new object[] {"QD, 8D, KD, 7D, 3D", "AS, QS, 8S, 6S, 4S", "4S, 4H, 3H, QC, 8C"}, new object[] {"2nd Player"})]   // Flush
+        [TestCase( new object[] {"3H, 5D, 9C, 9D, QH", "2H, 2C, 5S, 10C, AH", "5C, 5D, 5H, 9S, QS"}, new object[] {"3rd Player"})]  // Three of a Kind
+        [TestCase( new object[] {"5C, 8D, 9H, 8S, QD", "2H, 3D, 4C, 5D, 10H", "2C, 4D, 5S, 10C, JH"}, new object[] {"1st Player"})] // One Pair
+        [TestCase( new object[] {"5C, 7D, 8H, 9S, QD", "2H, 3D, 4C, 5D, 10H", "2C, 4D, 5S, 10C, JH"}, new object[] {"1st Player"})] // High Card
         [TestCase( new object[] {"4D, 5S, 3C, 2S, JD", "2H, 3D, 4C, 5D, 10H", "4S, 5D, 3H, 2D, JS"}, new object[] {"1st Player", "3rd Player"})]
         
         public void shouldReturnCorrectWinner(object[] cards, object[] expectedWinner) {

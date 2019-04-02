@@ -19,7 +19,7 @@ namespace PokerHandShowdown
             Assert.AreEqual(HandEvaluateTool.isFlush(TestUtility.convertCards(cards)), result);
         }
         
-        [TestCase( "4S, 4H, 3H, QC, 8C", 4, 2, 1, 1, 1, 0)] // WithPair
+        [TestCase( "4S, 4H, 3H, QC, 8C", 4, 2, 1, 1, 1, 0)] // One Pair
         [TestCase( "4H, 2H, JH, QH, 8H", 1, 5, 0, 0, 0, 0)] // Flush
         [TestCase( "4H, 2C, JH, QS, 8D", 5, 1, 1, 1, 1, 1)] // HighCards
         [TestCase( "4H, 4C, JH, 4S, 8D", 3, 3, 1, 1, 0, 0)] // Three of a Kind
