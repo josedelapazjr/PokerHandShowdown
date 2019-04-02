@@ -12,8 +12,3 @@ Implement a library (in C#) which evaluates who are the winner(s) among several 
 **Output**: Collection of winning players (more than one in case of a tie)
 
 **Note**: Please direct all output to the Console window (a GUI is not necessary for this task).
-
-
-Limitations: 
-
-* Currently, only able to display 1 winner at a time.

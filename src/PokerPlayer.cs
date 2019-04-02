@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace PokerHandShowdown
@@ -6,10 +7,12 @@ namespace PokerHandShowdown
     public class PokerPlayer : IComparable<PokerPlayer> {
         public string Name { get; private set; }
         public List<CardGroup> CardGroupList { get; private set; }
+        public List<PokerPlayer> TiedPlayerList { get; private set; }
         
         public PokerPlayer(string name, List<Card> cardList) {
             Name = name;
             CardGroupList = HandEvaluateTool.generateGrouping(cardList);
+            TiedPlayerList = new List<PokerPlayer>();
         }
         
                
@@ -27,7 +30,14 @@ namespace PokerHandShowdown
                 }
                 index++;
             }
+            this.addTiedPlayer(other);
             return 0;
+        }
+
+        public void addTiedPlayer(PokerPlayer foobar) {
+            if(!TiedPlayerList.Any(player => player.Name == foobar.Name)) {
+                TiedPlayerList.Add(foobar);
+            }
         }
         
         public void display() {

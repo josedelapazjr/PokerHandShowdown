@@ -31,15 +31,15 @@ namespace PokerHandShowdown
                 new Card(CardRank.Queen, CardSuit.Club),
                 new Card(CardRank.Eight, CardSuit.Club)
             };
-
-            PokerHandShowdown pokerHandShowdown = new PokerHandShowdown(
-                new List<PokerPlayer> {
+            
+            List<string> winnerList = PokerHandShowdown.GetWinners(new List<PokerPlayer> {
                     new PokerPlayer("Joe", listofCards1),  
                     new PokerPlayer("Bob", listofCards2),
-                    new PokerPlayer("Sally", listofCards3),  
-                }
-            );
-            Console.WriteLine("{0} wins", pokerHandShowdown.GetWinner());
+                    new PokerPlayer("Sally", listofCards3), 
+                });
+            foreach(string name in winnerList) {
+                Console.WriteLine("{0} wins", name);
+            }
         }
     }
 }
