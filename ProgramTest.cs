@@ -48,41 +48,27 @@ namespace PokerHandShowdown
             Assert.AreEqual(HandEvaluate.isFlush(convertCards(cards)), result);
         }
         
-        [TestCase( "4S, 4H, 3H, QC, 8C")]
-        public void shouldReturnCorrectGenerateGroupingWithPair(string cards) {
+        [TestCase( "4S, 4H, 3H, QC, 8C", 4, 2, 1, 1, 1, 0)] // WithPair
+        [TestCase( "4H, 2H, JH, QH, 8H", 1, 5, 0, 0, 0, 0)] // Flush
+        [TestCase( "4H, 2C, JH, QS, 8D", 5, 1, 1, 1, 1, 1)] // HighCards
+        [TestCase( "4H, 4C, JH, 4S, 8D", 3, 3, 1, 1, 0, 0)] // Three of a Kind
+        public void shouldReturnCorrectGenerateGrouping(string cards, int totalCount, int count1, int count2, int count3, int count4, int count5) {
             List<Card> cardList = convertCards(cards);
             List<CardGroup> cardGroupList = HandEvaluate.generateGrouping(cardList);
-            Assert.AreEqual(cardGroupList.Count, 4);
-            Assert.AreEqual(cardGroupList[0].CardList.Count, 2);
-            Assert.AreEqual(cardGroupList[1].CardList.Count, 1);
-            Assert.AreEqual(cardGroupList[2].CardList.Count, 1);
-            Assert.AreEqual(cardGroupList[3].CardList.Count, 1);
-        }
-
-        [TestCase( "4H, 2H, JH, QH, 8H")]
-        public void shouldReturnCorrectGenerateGroupingWithFlush(string cards) {
-            List<Card> cardList = convertCards(cards);
-            List<CardGroup> cardGroupList = HandEvaluate.generateGrouping(cardList);
-            Assert.AreEqual(cardGroupList.Count, 1);
-            Assert.AreEqual(cardGroupList[0].CardList.Count, 5);
-        }
-
-        [TestCase( "4H, 2C, JH, QS, 8D")]
-        public void shouldReturnCorrectGenerateGroupingWithHighCards(string cards) {
-            List<Card> cardList = convertCards(cards);
-            List<CardGroup> cardGroupList = HandEvaluate.generateGrouping(cardList);
-            Assert.AreEqual(cardGroupList.Count, 5);
-            Assert.AreEqual(cardGroupList[0].CardList.Count, 1);
-        }
-
-        [TestCase( "4H, 4C, JH, 4S, 8D")]
-        public void shouldReturnCorrectGenerateGroupingWithThreeOfAKind(string cards) {
-            List<Card> cardList = convertCards(cards);
-            List<CardGroup> cardGroupList = HandEvaluate.generateGrouping(cardList);
-            Assert.AreEqual(cardGroupList.Count, 3);
-            Assert.AreEqual(cardGroupList[0].CardList.Count, 3);
-            Assert.AreEqual(cardGroupList[1].CardList.Count, 1);
-            Assert.AreEqual(cardGroupList[2].CardList.Count, 1);
+            Assert.AreEqual(cardGroupList.Count, totalCount);
+            Assert.AreEqual(cardGroupList[0].CardList.Count, count1);
+            if(count2 > 0) {
+                Assert.AreEqual(cardGroupList[1].CardList.Count, count2);
+            }
+            if(count3 > 0) {
+                Assert.AreEqual(cardGroupList[2].CardList.Count, count3);
+            }
+            if(count4 > 0) {
+                Assert.AreEqual(cardGroupList[3].CardList.Count, count4);
+            }
+            if(count5 > 0) {
+                Assert.AreEqual(cardGroupList[4].CardList.Count, count5);
+            }
         }
 
         [TestCase( new object[] {"QD, 8D, KD, 7D, 3D", "AS, QS, 8S, 6S, 4S", "4S, 4H, 3H, QC, 8C"}, "2nd Player")]

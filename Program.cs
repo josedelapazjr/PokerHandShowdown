@@ -50,8 +50,8 @@ namespace PokerHandShowdown
 // Card ( CardRank, CardSuit) => OK
 // CardsOnHand ( Array of Cards, isFlush(), isThreeOfAKind, isHighCard) => OK
 // CardsOnHandEvaluator => ? (Tools/Utility class)
-// Test => ?
-// Validator => Just check duplicates
+// Test => OK
+// Validator => OK
 // Tie => ?
 // HighCard => OK
 // Same Cards => OK
